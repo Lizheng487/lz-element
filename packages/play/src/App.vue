@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
@@ -11,8 +10,7 @@ import HelloWorld from './components/HelloWorld.vue'
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <LzButton>111111111</LzButton>
-  <HelloWorld msg="Vite + Vue" />
+  <LzButton type="primary" size="large" plain>111111111</LzButton>
 </template>
 
 <style scoped>

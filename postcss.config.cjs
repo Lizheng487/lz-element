@@ -2,6 +2,7 @@
 module.exports = {
   plugins: [
     require("postcss-nested"),
+    require("postcss-simple-vars"),
     require("postcss-each-variables"),
     require("postcss-each")({
       plugins: {

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import type { ButtonProps, ButtonEmits, ButtonInstance } from './types';
 import { throttle } from 'lodash-es';
-import { LzIcon } from 'lz-element';
+import { LzIcon } from '../Icon';
 
 defineOptions({
   name: 'LzButton',

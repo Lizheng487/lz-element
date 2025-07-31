@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.12.2",
+  "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "@vitest/coverage-v8": "^1.6.1",
     "@vue/test-utils": "^2.4.6",

@@ -41,7 +41,7 @@ describe("Button.vue", () => {
       const wrapper = mount(Button, {
         props: { [prop]: true },
         global: {
-          stubs: ["ErIcon"],
+          stubs: ["LzIcon"],
         },
       });
       expect(wrapper.classes()).toContain(className);
@@ -98,7 +98,7 @@ describe("Button.vue", () => {
     const wrapper = mount(Button, {
       props: { loading: true },
       global: {
-        stubs: ["ErIcon"],
+        stubs: ["LzIcon"],
       },
     });
     const iconElement = wrapper.findComponent(Icon);
@@ -158,7 +158,7 @@ describe("Button.vue", () => {
         default: "loading button",
       },
       global: {
-        stubs: ["ErIcon"],
+        stubs: ["LzIcon"],
       },
     });
 
@@ -188,7 +188,7 @@ describe("Button.vue", () => {
         default: "icon button",
       },
       global: {
-        stubs: ["ErIcon"],
+        stubs: ["LzIcon"],
       },
     });
 

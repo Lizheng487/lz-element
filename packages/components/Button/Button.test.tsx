@@ -1,158 +1,254 @@
-// Button.test.tsx
-import { describe, it, expect, vi } from 'vitest'
-import { mount } from '@vue/test-utils'
-import Button from './Button.vue'
+import { describe, it, test, expect, vi } from "vitest";
+import { mount } from "@vue/test-utils";
 
-describe('Button Component', () => {
-  /* ---------- 4.1 基础形态 ---------- */
-  it('renders secondary/md/fill/default by default', () => {
-    const wrapper = mount(() => <Button />)
-    expect(wrapper.classes()).toContain('lz-button--secondary')
-    expect(wrapper.classes()).toContain('lz-button--md')
-    expect(wrapper.classes()).toContain('lz-button--fill')
-    expect(wrapper.classes()).toContain('lz-button--default')
-  })
+import Button from "./Button.vue";
+import ButtonGroup from "./ButtonGroup.vue";
+import Icon from "../Icon/Icon.vue";
 
-  it('applies correct type class', () => {
-    const wrapper = mount(() => <Button type="danger" />)
-    expect(wrapper.classes()).toContain('lz-button--danger')
-  })
+describe("Button.vue", () => {
+  // Props: type
+  it("should has the correct type class when type prop is set", () => {
+    const types = ["primary", "success", "warning", "danger", "info"];
+    types.forEach((type) => {
+      const wrapper = mount(Button, {
+        props: { type: type as any },
+      });
+      expect(wrapper.classes()).toContain(`lz-button--${type}`);
+    });
+  });
 
-  it('applies correct size class', () => {
-    const wrapper = mount(() => <Button size="small" />)
-    expect(wrapper.classes()).toContain('lz-button--small')
-  })
+  // Props: size
+  it("should has the correct size class when size prop is set", () => {
+    const sizes = ["large", "default", "small"];
+    sizes.forEach((size) => {
+      const wrapper = mount(Button, {
+        props: { size: size as any },
+      });
+      expect(wrapper.classes()).toContain(`lz-button--${size}`);
+    });
+  });
 
-  // it('applies correct shape class', () => {
-  //   const wrapper = mount(() => <Button shape="circle" />)
-  //   expect(wrapper.classes()).toContain('lz-button--circle')
-  // })
+  // Props: plain, round, circle
+  it.each([
+    ["plain", "is-plain"],
+    ["round", "is-round"],
+    ["circle", "is-circle"],
+    ["disabled", "is-disabled"],
+    ["loading", "is-loading"],
+  ])(
+    "should has the correct class when prop %s is set to true",
+    (prop, className) => {
+      const wrapper = mount(Button, {
+        props: { [prop]: true },
+        global: {
+          stubs: ["ErIcon"],
+        },
+      });
+      expect(wrapper.classes()).toContain(className);
+    }
+  );
 
-  // it('applies correct variant class', () => {
-  //   const wrapper = mount(() => <Button variant="ghost" />)
-  //   expect(wrapper.classes()).toContain('lz-button--ghost')
-  // })
+  it("should has the correct native type attribute when native-type prop is set", () => {
+    const wrapper = mount(Button, {
+      props: { nativeType: "submit" },
+    });
+    expect(wrapper.element.tagName).toBe("BUTTON");
+    expect((wrapper.element as any).type).toBe("submit");
+  });
 
-  /* ---------- 4.2 状态 ---------- */
-  it('adds loading state and disables interaction', () => {
-    const wrapper = mount(() => <Button loading />)
-    expect(wrapper.find('.lz-button__loading').exists()).toBe(true)
-    expect(wrapper.attributes('disabled')).toBeDefined()
-  })
+  // Test the click event with and without throttle
+  it.each([
+    ["withoutThrottle", false],
+    ["withThrottle", true],
+  ])("emits click event %s", async (_, useThrottle) => {
+    const clickSpy = vi.fn();
+    const wrapper = mount(() => (
+      <Button
+        onClick={clickSpy}
+        {...{
+          useThrottle,
+          throttleDuration: 400,
+        }}
+      />
+    ));
 
-  it('adds disabled state', () => {
-    const wrapper = mount(() => <Button disabled />)
-    expect(wrapper.attributes('disabled')).toBeDefined()
-  })
+    await wrapper.get("button").trigger("click");
+    await wrapper.get("button").trigger("click");
+    await wrapper.get("button").trigger("click");
+    expect(clickSpy).toBeCalledTimes(useThrottle ? 1 : 3);
+  });
 
-  // it('adds active state', () => {
-  //   const wrapper = mount(() => <Button active />)
-  //   expect(wrapper.classes()).toContain('lz-button--active')
-  // })
+  // Props: tag
+  it("should renders the custom tag when tag prop is set", () => {
+    const wrapper = mount(Button, {
+      props: { tag: "a" },
+    });
+    expect(wrapper.element.tagName.toLowerCase()).toBe("a");
+  });
 
-  it('shows focus-visible ring on keyboard focus', async () => {
-    const wrapper = mount(() => <Button />)
-    await wrapper.trigger('focus')
-    expect(wrapper.classes()).toContain('lz-button--focus-visible')
-  })
+  // Events: click
+  it("should emits a click event when the button is clicked", async () => {
+    const wrapper = mount(Button, {});
+    await wrapper.trigger("click");
+    expect(wrapper.emitted().click).toHaveLength(1);
+  });
 
-  /* ---------- 4.3 图标 ---------- */
-  // it('renders icon on the left by default', () => {
-  //   const Icon = () => <svg data-test="icon" />
-  //   const wrapper = mount(() => <Button icon={<Icon />} />)
-  //   expect(wrapper.findComponent(Icon).exists()).toBe(true)
-  //   expect(wrapper.find('.lz-button__icon--left').exists()).toBe(true)
-  // })
+  // Exception Handling: loading state
+  it("should display loading icon and not emit click event when button is loading", async () => {
+    const wrapper = mount(Button, {
+      props: { loading: true },
+      global: {
+        stubs: ["ErIcon"],
+      },
+    });
+    const iconElement = wrapper.findComponent(Icon);
 
-  // it('renders icon on the right', () => {
-  //   const Icon = () => <svg data-test="icon" />
-  //   const wrapper = mount(() => <Button icon={<Icon />} iconPosition="right" />)
-  //   expect(wrapper.find('.lz-button__icon--right').exists()).toBe(true)
-  // })
+    expect(wrapper.find(".loading-icon").exists()).toBe(true);
+    expect(iconElement.exists()).toBeTruthy();
+    expect(iconElement.attributes("icon")).toBe("spinner");
+    await wrapper.trigger("click");
+    expect(wrapper.emitted("click")).toBeUndefined();
+  });
 
-  // it('renders icon only', () => {
-  //   const Icon = () => <svg data-test="icon" />
-  //   const wrapper = mount(() => <Button icon={<Icon />} iconPosition="only" />)
-  //   expect(wrapper.text()).toBe('')
-  //   expect(wrapper.find('.lz-button__icon--only').exists()).toBe(true)
-  // })
+  const onClick = vi.fn();
+  test("basic button", async () => {
+    const wrapper = mount(() => (
+      <Button type="primary" {...{ onClick }}>
+        button content
+      </Button>
+    ));
 
-  /* ---------- 4.4 主题 Token ---------- */
-  it('inherits CSS variables for primary background', () => {
-    const wrapper = mount(() => <Button type="primary" />)
-    const bg = getComputedStyle(wrapper.element).getPropertyValue(
-      '--lz-button-primary-bg'
-    )
-    expect(bg).toBe('#0052d9')
-  })
+    // class
+    expect(wrapper.classes()).toContain("lz-button--primary");
 
-  /* ---------- 4.5 交互增强 ---------- */
-  // it('applies throttle on click', async () => {
-  //   const fn = vi.fn()
-  //   const wrapper = mount(() => <Button onClick={fn} throttle={200} />)
-  //   wrapper.trigger('click')
-  //   wrapper.trigger('click')
-  //   expect(fn).toHaveBeenCalledTimes(1)
-  // })
+    // slot
+    expect(wrapper.get("button").text()).toBe("button content");
 
-  // it('applies debounce on click', async () => {
-  //   vi.useFakeTimers()
-  //   const fn = vi.fn()
-  //   const wrapper = mount(() => <Button onClick={fn} debounce={200} />)
-  //   wrapper.trigger('click')
-  //   vi.advanceTimersByTime(200)
-  //   expect(fn).toHaveBeenCalledOnce()
-  // })
+    // events
+    await wrapper.get("button").trigger("click");
+    expect(onClick).toHaveBeenCalledOnce();
+  });
 
-  // it('sets autofocus', () => {
-  //   const wrapper = mount(() => <Button autofocus />)
-  //   expect(document.activeElement).toBe(wrapper.element)
-  // })
+  test("disabled button", async () => {
+    const wrapper = mount(() => (
+      <Button disabled {...{ onClick }}>
+        disabled button
+      </Button>
+    ));
 
-  it('sets native-type to submit', () => {
-    const wrapper = mount(() => <Button nativeType="submit" />)
-    expect(wrapper.attributes('type')).toBe('submit')
-  })
+    // class
+    expect(wrapper.classes()).toContain("is-disabled");
 
-  /* ---------- 4.6 无障碍 ---------- */
-  it('warns when aria-label is missing in dev mode', () => {
-    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    mount(() => <Button />)
-    expect(spy).toHaveBeenCalledWith(
-      expect.stringContaining('aria-label')
-    )
-    spy.mockRestore()
-  })
+    // attrs
+    expect(wrapper.attributes("disabled")).toBeDefined();
+    expect(wrapper.find("button").element.disabled).toBeTruthy();
 
-  it('sets aria-label correctly', () => {
-    const wrapper = mount(() => <Button aria-label="submit form" />)
-    expect(wrapper.attributes('aria-label')).toBe('submit form')
-  })
+    // events
+    await wrapper.get("button").trigger("click");
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(wrapper.emitted("click")).toBeUndefined();
+  });
 
-  it('fires click on Space key', async () => {
-    const fn = vi.fn()
-    const wrapper = mount(() => <Button onClick={fn} />)
-    await wrapper.trigger('keydown', { code: 'Space' })
-    expect(fn).toHaveBeenCalledOnce()
-  })
+  test("loading button", () => {
+    const wrapper = mount(Button, {
+      props: {
+        loading: true,
+      },
+      slots: {
+        default: "loading button",
+      },
+      global: {
+        stubs: ["ErIcon"],
+      },
+    });
 
-  it('fires click on Enter key', async () => {
-    const fn = vi.fn()
-    const wrapper = mount(() => <Button onClick={fn} />)
-    await wrapper.trigger('keydown', { code: 'Enter' })
-    expect(fn).toHaveBeenCalledOnce()
-  })
+    // class
+    expect(wrapper.classes()).toContain("is-loading");
 
-  /* ---------- 4.7 响应式 ---------- */
-  // it('increases min dimensions on touch device when responsive=true', () => {
-  //   Object.defineProperty(window.navigator, 'maxTouchPoints', { value: 1 })
-  //   const wrapper = mount(() => <Button responsive />)
-  //   expect(wrapper.classes()).toContain('lz-button--touch')
-  // })
+    // attrs
+    expect(wrapper.attributes("disabled")).toBeDefined();
+    expect(wrapper.find("button").element.disabled).toBeTruthy();
 
-  // it('skips responsive sizing when responsive=false', () => {
-  //   Object.defineProperty(window.navigator, 'maxTouchPoints', { value: 1 })
-  //   const wrapper = mount(() => <Button responsive={false} />)
-  //   expect(wrapper.classes()).not.toContain('lz-button--touch')
-  // })
-})
+    // events
+    wrapper.get("button").trigger("click");
+    expect(wrapper.emitted()).not.toHaveProperty("click");
+
+    // icon
+    const iconElement = wrapper.findComponent(Icon);
+    expect(iconElement.exists()).toBeTruthy();
+    expect(iconElement.attributes("icon")).toBe("spinner");
+  });
+
+  test("icon button", () => {
+    const wrapper = mount(Button, {
+      props: {
+        icon: "arrow-up",
+      },
+      slots: {
+        default: "icon button",
+      },
+      global: {
+        stubs: ["ErIcon"],
+      },
+    });
+
+    const iconElement = wrapper.findComponent(Icon);
+    expect(iconElement.exists()).toBeTruthy();
+    expect(iconElement.attributes("icon")).toBe("arrow-up");
+  });
+});
+
+describe("ButtonGroup.vue", () => {
+  test("basic button group", async () => {
+    const wrapper = mount(() => (
+      <ButtonGroup>
+        <Button>button 1</Button>
+        <Button>button 2</Button>
+      </ButtonGroup>
+    ));
+
+    expect(wrapper.classes()).toContain("lz-button-group");
+  });
+
+  test("button group size", () => {
+    const sizes = ["large", "default", "small"];
+    sizes.forEach((size) => {
+      const wrapper = mount(() => (
+        <ButtonGroup size={size as any}>
+          <Button>button 1</Button>
+          <Button>button 2</Button>
+        </ButtonGroup>
+      ));
+
+      const buttonWrapper = wrapper.findComponent(Button);
+      expect(buttonWrapper.classes()).toContain(`lz-button--${size}`);
+    });
+  });
+
+  test("button group type", () => {
+    const types = ["primary", "success", "warning", "danger", "info"];
+    types.forEach((type) => {
+      const wrapper = mount(() => (
+        <ButtonGroup type={type as any}>
+          <Button>button 1</Button>
+          <Button>button 2</Button>
+        </ButtonGroup>
+      ));
+
+      const buttonWrapper = wrapper.findComponent(Button);
+      expect(buttonWrapper.classes()).toContain(`lz-button--${type}`);
+    });
+  });
+
+  test("button group disabled", () => {
+    const wrapper = mount(() => (
+      <ButtonGroup disabled>
+        <Button>button 1</Button>
+        <Button>button 2</Button>
+      </ButtonGroup>
+    ));
+
+    const buttonWrapper = wrapper.findComponent(Button);
+    expect(buttonWrapper.classes()).toContain(`is-disabled`);
+  });
+});

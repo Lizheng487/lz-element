@@ -1,12 +1,18 @@
 import type { Component } from "vue";
 import type { Ref } from "vue";
 // 定义按钮的类型
-export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
-export type ButtonSize = 'small' | 'default' | 'large';
-export type ButtonNativeType = 'button' | 'submit' | 'reset';
+export type ButtonType =
+  | "default"
+  | "primary"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info";
+export type ButtonSize = "small" | "default" | "large";
+export type ButtonNativeType = "button" | "submit" | "reset";
 
 export interface ButtonProps {
-  tag?: string|Component;
+  tag?: string | Component;
   type?: ButtonType;
   size?: ButtonSize;
   nativeType?: ButtonNativeType;
@@ -22,9 +28,21 @@ export interface ButtonProps {
   loadingIcon?: string;
   onClick?: (event: MouseEvent) => void;
 }
+export interface ButtonGroupProps {
+  type?: ButtonType;
+  size?: ButtonSize;
+  disabled?: boolean;
+}
+
+export interface ButtonGroupContext {
+  type?: ButtonType;
+  size?: ButtonSize;
+  disabled?: boolean;
+}
+
 export interface ButtonEmits {
-  (e: 'click', event: MouseEvent): void;
+  (e: "click", event: MouseEvent): void;
 }
 export interface ButtonInstance {
-  ref: Ref<HTMLButtonElement|void>;
+  ref: Ref<HTMLButtonElement | void>;
 }

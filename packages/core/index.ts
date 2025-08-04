@@ -7,5 +7,5 @@ import "@lz-element/theme/index.css";
 library.add(fas);
 const installer = makeInstaller(components);
 
-export * from "@lz-element/components";
+export * from "../components";
 export default installer;

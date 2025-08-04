@@ -20,6 +20,6 @@ const customStyles = computed(() => ({
   </i>
 </template>
 
-<style scoped>
+<style>
 @import "./style.css";
 </style>

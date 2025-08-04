@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import './style.css'
+import 'lz-element/dist/index.css'
 import App from './App.vue'
 import LzElemnet from 'lz-element'
 

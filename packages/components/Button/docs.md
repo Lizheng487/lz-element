@@ -1,4 +1,4 @@
-# 自研组件库「Aurora UI」Button 组件需求文档
+# 自研组件库「LzElement UI」Button 组件需求文档
 
 > 版本：v0.1  
 > 日期：2025-07-30  
@@ -11,7 +11,7 @@
 - **背景**  
   现有 Element、Ant Design Vue 等通用组件库虽功能丰富，但在「品牌主题深度定制、移动端体验、低代码集成」上仍有不足。  
 - **目标**  
-  打造一款「设计即代码」的轻量级 Vue3 组件库 Aurora UI，其中 Button 作为核心原子组件，需同时满足：  
+  打造一款「设计即代码」的轻量级 Vue3 组件库 LzElement UI，其中 Button 作为核心原子组件，需同时满足：  
   1. 设计系统无缝接入  
   2. 一次开发，多端适配（桌面 & 移动）  
   3. 低代码平台可配置  
@@ -63,10 +63,10 @@
 ### 4.4 主题 Token（CSS Variables）
 ```css
 :root {
-  --aurora-button-primary-bg: #0052d9;
-  --aurora-button-primary-color: #ffffff;
-  --aurora-button-border-radius: 6px;
-  --aurora-button-font-weight: 500;
+  --LzElement-button-primary-bg: #0052d9;
+  --LzElement-button-primary-color: #ffffff;
+  --LzElement-button-border-radius: 6px;
+  --LzElement-button-font-weight: 500;
 }
 ```
 - 需支持 HSL 动态计算，保证深色模式自动反转

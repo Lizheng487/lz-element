@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { LzButtonGroup } from 'lz-element';
+import { reactive } from 'vue';
 
+let activeName = reactive({
+  accordion: true,
+  modelValue: ["a"],
+});
 </script>
 
 <template>
@@ -17,6 +22,17 @@ import { LzButtonGroup } from 'lz-element';
     <lz-button type="primary"><lz-icon icon="angle-left"></lz-icon>上一页</lz-button>
     <lz-button type="primary">下一页<lz-icon icon="angle-right"></lz-icon></lz-button>
   </lz-button-group>
+  <lz-collapse v-bind="activeName">
+    <lz-collapse-item name="a" title="Title a">
+      <div>this is content a</div>
+    </lz-collapse-item>
+    <lz-collapse-item name="b" title="title b">
+      <div>this is content b</div>
+    </lz-collapse-item>
+    <lz-collapse-item name="c" title="title c  disable" disabled>
+      <div>this is content c</div>
+    </lz-collapse-item>
+  </lz-collapse>
 </template>
 
 <style scoped>

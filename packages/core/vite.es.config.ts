@@ -2,8 +2,18 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
+import { readdirSync } from "fs";
+import { filter, map } from "lodash-es";
 
-const COMP_NAME = ["Button", "Icon", "ButtonGroup"] as const;
+// getDirectoriesSync方法 获取当前目录下的所有子目录
+function getDirectoriesSync(basePath: string) {
+  const entries = readdirSync(basePath, {withFileTypes: true});
+  return map(
+    filter(entries, (entry) => entry.isDirectory()),
+    (entry) => entry.name
+  );
+}
+
 
 export default defineConfig({
   plugins: [
@@ -48,7 +58,7 @@ export default defineConfig({
           ) {
             return "utils";
           }
-          for (const item of COMP_NAME) {
+          for (const item of getDirectoriesSync("../components")) {
             if (id.includes("/packages/components/" + item + "/")) {
               return item;
             }

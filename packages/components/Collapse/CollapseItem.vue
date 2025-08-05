@@ -3,6 +3,7 @@ import type { CollapseItemProps } from './types';
 import { inject, computed } from 'vue';
 import { COLLAPSE_CTX_KEY } from './contants';
 import LzIcon from '../Icon/Icon.vue';
+import transitionEvents from './transitionEvents';
 defineOptions({
   name: 'LzCollapseItem',
 });
@@ -31,11 +32,13 @@ function handleClick() {
       </span>
       <lz-icon icon="angle-right" class="header-angle"></lz-icon>
     </div>
-    <div class="lz-collapse-item__wapper" v-show="isActive">
-      <div class="lz-collapse-item__content" :id="`item-content-${name}`">
-        <slot></slot>
+    <transition name="slide" v-on="transitionEvents">
+      <div class="lz-collapse-item__wapper" v-show="isActive">
+        <div class="lz-collapse-item__content" :id="`item-content-${name}`">
+          <slot></slot>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 <style scoped>

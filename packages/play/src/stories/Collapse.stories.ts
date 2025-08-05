@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/vue3-vite";
 import { LzCollapse, LzCollapseItem } from "lz-element";
-// import 'lz-element/dist/theme/Collapse.css'
+import 'lz-element/dist/theme/Collapse.css'
 
 type Story = StoryObj<typeof LzCollapse>;
 

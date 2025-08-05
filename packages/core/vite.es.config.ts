@@ -3,17 +3,32 @@ import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
 import { readdirSync } from "fs";
-import { filter, map } from "lodash-es";
+import { filter, map, delay } from "lodash-es";
+import shell from "shelljs";
+import hooks from "./hookPlugin";
+import terser from "@rollup/plugin-terser";
+
+const isProd = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
+const isTest = process.env.NODE_ENV === "test";
+const TRY_MOVE_STYLE_DELAY = 1000 as const;
 
 // getDirectoriesSync方法 获取当前目录下的所有子目录
 function getDirectoriesSync(basePath: string) {
-  const entries = readdirSync(basePath, {withFileTypes: true});
+  const entries = readdirSync(basePath, { withFileTypes: true });
   return map(
     filter(entries, (entry) => entry.isDirectory()),
     (entry) => entry.name
   );
 }
-
+function moveStyles() {
+  try {
+    readdirSync("./dist/es/theme");
+    shell.mv("./dist/es/theme", "./dist");
+  } catch (_) {
+    delay(moveStyles, TRY_MOVE_STYLE_DELAY);
+  }
+}
 
 export default defineConfig({
   plugins: [
@@ -22,9 +37,42 @@ export default defineConfig({
       tsconfigPath: "../../tsconfig.build.json",
       outDir: "dist/types",
     }),
+    hooks({
+      reFiles: ["./dist/es", "./dist/theme", "./dist/types"],
+      afterBuild: moveStyles,
+    }),
+    terser({
+      compress: {
+        sequences: isProd,
+        arguments: isProd,
+        drop_console: isProd && ["log"],
+        drop_debugger: isProd,
+        passes: isProd ? 2 : 1,
+        global_defs: {
+          "@DEV": JSON.stringify(isDev),
+          "@PROD": JSON.stringify(isProd),
+          "@TEST": JSON.stringify(isTest),
+        },
+      },
+      format: {
+        semicolons: false,
+        shorthand: isProd,
+        braces: !isProd,
+        beautify: !isProd,
+        comments: !isProd,
+      },
+      mangle: {
+        toplevel: isProd,
+        eval: isProd,
+        keep_classnames: isDev,
+        keep_fnames: isDev,
+      },
+    }),
   ],
   build: {
     outDir: "dist/es",
+    minify: false,
+    cssCodeSplit: true,
     lib: {
       entry: resolve(__dirname, "./index.ts"),
       name: "LzElement",
@@ -43,6 +91,12 @@ export default defineConfig({
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === "style.css") return "index.css";
+          if (
+            assetInfo.type === "asset" &&
+            /\.(css)$/i.test(assetInfo.name as string)
+          ) {
+            return "theme/[name].[ext]";
+          }
           return assetInfo.name as string;
         },
         manualChunks: (id) => {

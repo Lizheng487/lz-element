@@ -1,4 +1,4 @@
-import "lz-element/dist/index.css"
+import "lz-element/dist/theme/index.css"
 import type { Preview } from '@storybook/vue3-vite'
 
 const preview: Preview = {

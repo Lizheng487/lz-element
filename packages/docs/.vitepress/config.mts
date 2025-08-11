@@ -1,23 +1,29 @@
 import { defineConfig } from 'vitepress'
-
+import {
+  containerPreview,
+  componentPreview,
+} from "@vitepress-demo-preview/plugin";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Lz-Element",
+  title: "LzElement",
   description: "开发组件库",
   base: '/lz-element/',
+  appearance: false,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: '开始', link: '/start' },
+      { text: '开始', link: '/get-started' },
       { text: '组件', link: '/components/button' }
     ],
-
+    search: {
+      provider: 'local'
+    },
     sidebar: [
       {
         text: '指南',
         collapsed: false,
         items: [
-          { text: '开始', link: '/start' },
+          { text: '开始', link: '/get-started' },
         ]
       },
       {
@@ -34,5 +40,11 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/Lizheng487/lz-element' }
     ]
+  },
+  markdown: {
+    config: (md) => {
+      md.use(containerPreview)
+      md.use(componentPreview)
+    }
   }
 })

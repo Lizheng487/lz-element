@@ -3,23 +3,23 @@
 layout: home
 
 hero:
-  name: "Lz-Element"
+  name: "LzElement"
   text: "开发组件库"
-  tagline: My great project tagline
+  tagline: 为了更好的开发
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
-    - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: 开始使用
+      link: /get-started
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - icon: ⚡
+    title: 开发
+    details: Vue3 + TS + Vite + Vitest + Vitepress 工具链
+  - icon: 🖖
+    title: 性能
+    details: 功能全面、易用性强、支持按需引入、模块化封装、轻量体积
+  - icon: 🛠️
+    title: 愿景
+    details: 为开发者提供高效的界面构建解决方案
 ---
 

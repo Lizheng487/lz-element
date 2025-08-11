@@ -6,8 +6,11 @@ class LzUIError extends Error {
     this.name = "LzUIError";
   }
 }
+function createLzUIError(scope: string, msg: string) {
+  return new LzUIError(`[${scope}]:${msg}`);
+}
 export function throwError(scope: string, msg: string) {
-  throw new LzUIError(`[${scope}] ${msg}`);
+  throw createLzUIError(scope, msg);
 }
 export function debugWarn(error: Error): void;
 export function debugWarn(scope: string, msg: string): void;

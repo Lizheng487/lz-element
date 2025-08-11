@@ -1,4 +1,4 @@
-import type { Component } from "vue";
+import type { Component, ComputedRef } from "vue";
 import type { Ref } from "vue";
 // 定义按钮的类型
 export type ButtonType =
@@ -45,4 +45,7 @@ export interface ButtonEmits {
 }
 export interface ButtonInstance {
   ref: Ref<HTMLButtonElement | void>;
+  disabled: ComputedRef<boolean>;
+  size: ComputedRef<ButtonSize | "">;
+  type: ComputedRef<ButtonType | "">;
 }

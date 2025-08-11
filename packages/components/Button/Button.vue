@@ -29,19 +29,22 @@ const handleBtnClickThrottle = throttle(handleBtnClick, props.throttleDuration, 
 
 
 // 明确指定返回类型为 string
-const size = computed<string>(() => {
+const size = computed(() => {
   return ctx?.size ?? props?.size ?? ""
 })
 // 明确指定返回类型为 string
-const type = computed<string>(() => {
+const type = computed(() => {
   return ctx?.type ?? props?.type ?? ""
 })
 // 明确指定返回类型为 boolean
-const disabled = computed<boolean>(() => {
+const disabled = computed(() => {
   return ctx?.disabled || props?.disabled || false
 })
 defineExpose<ButtonInstance>({
   ref: _ref,
+  disabled,
+  size,
+  type,
 });
 </script>
 <template>

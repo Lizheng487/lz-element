@@ -4,6 +4,7 @@ import {
   LzButtonGroup,
   LzCollapse,
   LzCollapseItem,
+  LzAlert,
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -13,4 +14,5 @@ export default [
   LzButtonGroup,
   LzCollapse,
   LzCollapseItem,
+  LzAlert,
 ] as Plugin[];

@@ -17,6 +17,9 @@ importers:
       '@lz-element/utils':
         specifier: workspace:*
         version: link:packages/utils
+      '@lz-element/vite-plugins':
+        specifier: workspace:*
+        version: link:libs/vite-plugins
       '@vitest/coverage-v8':
         specifier: ^1.6.1
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.9)(jsdom@24.1.3)(sass@1.90.0)(terser@5.43.1))
@@ -105,6 +108,9 @@ importers:
       vite:
         specifier: ^5.4.19
         version: 5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1)
+      vite-plugin-dts:
+        specifier: ^3.9.1
+        version: 3.9.1(@types/node@20.19.9)(rollup@4.46.2)(typescript@5.8.3)(vite@5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1))
       vitest:
         specifier: ^1.6.1
         version: 1.6.1(@types/node@20.19.9)(@vitest/browser@3.2.4)(jsdom@24.1.3)(sass@1.90.0)(terser@5.43.1)
@@ -199,9 +205,6 @@ importers:
       vite-plugin-compression2:
         specifier: ^2.2.0
         version: 2.2.0(rollup@4.46.2)
-      vite-plugin-dts:
-        specifier: ^3.9.1
-        version: 3.9.1(@types/node@20.19.9)(rollup@4.46.2)(typescript@5.8.3)(vite@5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1))
 
   packages/docs:
     devDependencies:
@@ -215,7 +218,14 @@ importers:
         specifier: workspace:*
         version: link:../../libs/vitepress-preview-component
 
-  packages/hooks: {}
+  packages/hooks:
+    dependencies:
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+      vue:
+        specifier: ^3.5.18
+        version: 3.5.18(typescript@5.8.3)
 
   packages/play:
     devDependencies:

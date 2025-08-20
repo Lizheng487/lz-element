@@ -5,7 +5,8 @@ import dts from "vite-plugin-dts";
 import { readdirSync, readdir } from "fs";
 import { filter, map, delay, defer } from "lodash-es";
 import shell from "shelljs";
-import hooks from "../hookPlugin";
+// import hooks from "../hookPlugin";
+import { hooksPlugin as hooks} from "@lz-element/vite-plugins";
 import terser from "@rollup/plugin-terser";
 import { visualizer } from "rollup-plugin-visualizer";
 

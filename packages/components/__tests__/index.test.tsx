@@ -7,7 +7,7 @@ import {
   LzCollapse,
   LzCollapseItem,
   LzIcon,
-  // LzTooltip,
+  LzTooltip,
 } from "..";
 import { get, map } from "lodash-es";
 
@@ -18,7 +18,7 @@ const comps = [
   LzCollapse,
   LzCollapseItem,
   LzIcon,
-  // LzTooltip
+  LzTooltip
 ] as Plugin[];
 
 describe("components/index", () => {

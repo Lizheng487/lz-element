@@ -5,9 +5,10 @@ import { compression } from "vite-plugin-compression2";
 import { readFile } from "fs";
 import shell from "shelljs";
 import { delay, defer } from "lodash-es";
-import hooks from "../hookPlugin";
+// import hooks from "../hookPlugin";
 import terser from "@rollup/plugin-terser";
 import { visualizer } from "rollup-plugin-visualizer";
+import { hooksPlugin as hooks} from "@lz-element/vite-plugins";
 
 const isProd = process.env.NODE_ENV === "production";
 const isDev = process.env.NODE_ENV === "development";

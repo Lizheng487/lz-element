@@ -4,16 +4,22 @@ import { computed, ref, watchEffect, watch, type Ref, onUnmounted } from 'vue';
 import { bind, debounce, type DebouncedFunc, isNil } from 'lodash-es';
 import { createPopper, type Instance } from '@popperjs/core';
 import { useClickOutside } from '@lz-element/hooks';
+import useEvenstToTiggerNode from './useEventsToTiggerNode';
+
+interface _TooltipProps extends TooltipProps {
+  virtualRef?: HTMLElement | void
+  virtualTriggering?: boolean
+}
 
 defineOptions({
   name: 'LzTooltip'
 })
-const props = withDefaults(defineProps<TooltipProps>(), {
+const props = withDefaults(defineProps<_TooltipProps>(), {
   trigger: 'hover',
   placement: 'bottom',
   transition: 'fade',
-  showTimeout: "0",
-  hideTimeout: "200"
+  showTimeout: 0,
+  hideTimeout: 200
 })
 const emit = defineEmits<TooltipEmits>()
 const visible = ref(false)
@@ -22,7 +28,11 @@ const outerEvents: Ref<Record<string, EventListener>> = ref({})
 const dropdownEvents: Ref<Record<string, EventListener>> = ref({})
 const containerNode = ref<HTMLElement>()
 const popperNode = ref<HTMLElement>()
-const triggerNode = ref<HTMLElement>()
+const _triggerNode = ref<HTMLElement>()
+const triggerNode = computed(() => {
+  if (props.virtualTriggering) { return (props.virtualRef as HTMLElement) ?? _triggerNode.value }
+  return _triggerNode.value as HTMLElement;
+})
 const popperOptions = computed(() => ({
   placement: props.placement,
   modifiers: [
@@ -35,12 +45,12 @@ const popperOptions = computed(() => ({
   ],
   ...props.popperOptions,
 }))
-const openDelay = computed(() => {
-  props.trigger === 'hover' ? props.showTimeout : 0
-})
-const closeDelay = computed(() => {
-  props.trigger === 'hover' ? props.hideTimeout : 0
-})
+const openDelay = computed(() =>
+  props.trigger === "hover" ? props.showTimeout : 0
+);
+const closeDelay = computed(() =>
+  props.trigger === "hover" ? props.hideTimeout : 0
+);
 let openDebounce: DebouncedFunc<() => void> | void
 let closeDebounce: DebouncedFunc<() => void> | void
 function openFinal() {
@@ -120,13 +130,17 @@ watchEffect(() => {
   if (!props.manual) {
     attachEvents()
   }
-  openDebounce = debounce(bind(setVisible, null, true), openDelay)
-  closeDebounce = debounce(bind(setVisible, null, false), closeDelay)
+  openDebounce = debounce(bind(setVisible, null, true), openDelay.value)
+  closeDebounce = debounce(bind(setVisible, null, false), closeDelay.value)
 })
-useClickOutside(containerNode,()=>{
+useClickOutside(containerNode, () => {
   emit("click-outside")
-  if (props.trigger === "hover"||props.manual) return
+  if (props.trigger === "hover" || props.manual) return
   visible.value && closeFinal()
+})
+useEvenstToTiggerNode(props, triggerNode, events, ()=>{
+  openDebounce?.cancel()
+  setVisible(false)
 })
 onUnmounted(() => {
   destoryPopperInstance()
@@ -138,7 +152,7 @@ defineExpose<TooltipInstance>({
 </script>
 <template>
   <div class="lz-tooltip" ref="containerNode" v-on="outerEvents">
-    <div class="lz-tooltip__trigger" ref="triggerNode" v-on="events" v-if="!virtualTriggering">
+    <div class="lz-tooltip__trigger" ref="_triggerNode" v-on="events" v-if="!virtualTriggering">
       <slot></slot>
     </div>
     <slot name="default"></slot>
@@ -150,4 +164,6 @@ defineExpose<TooltipInstance>({
     </transition>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+@import "./style.css";
+</style>

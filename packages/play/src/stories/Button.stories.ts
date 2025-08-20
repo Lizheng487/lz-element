@@ -8,7 +8,7 @@ import 'lz-element/dist/theme/Button.css'
 type Story = StoryObj<typeof LzButton> & { argTypes?: ArgTypes };
 
 const meta: Meta<typeof LzButton> = {
-  title: "LzButton",
+  title: "Example/Button",
   component: LzButton,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/7.0/react/writing-docs/autodocs
   tags: ["autodocs"],

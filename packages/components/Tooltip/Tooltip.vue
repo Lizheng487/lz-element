@@ -39,7 +39,7 @@ const popperOptions = computed(() => ({
     {
       name: "offset",
       options: {
-        offset: [0, 8]
+        offset: [0, 9]
       }
     }
   ],
@@ -51,6 +51,21 @@ const openDelay = computed(() =>
 const closeDelay = computed(() =>
   props.trigger === "hover" ? props.hideTimeout : 0
 );
+const triggerStrategyMap: Map<string, () => void> = new Map();
+triggerStrategyMap.set("hover", () => {
+  events.value["mouseenter"] = openFinal;
+  outerEvents.value["mouseleave"] = closeFinal;
+  dropdownEvents.value["mouseenter"] = openFinal;
+});
+triggerStrategyMap.set("click", () => {
+  events.value["click"] = togglePopper;
+});
+triggerStrategyMap.set("contextmenu", () => {
+  events.value["contextmenu"] = (e) => {
+    e.preventDefault();
+    openFinal();
+  };
+});
 let openDebounce: DebouncedFunc<() => void> | void
 let closeDebounce: DebouncedFunc<() => void> | void
 function openFinal() {
@@ -71,23 +86,7 @@ function setVisible(value: boolean) {
 }
 function attachEvents() {
   if (props.disabled || props.manual) return
-  if (props.trigger === 'hover') {
-    events.value['mouseenter'] = openFinal
-    outerEvents.value['mouseleave'] = closeFinal
-    dropdownEvents.value['mouseenter'] = openFinal
-    return
-  }
-  if (props.trigger === 'click') {
-    events.value['click'] = togglePopper
-    return
-  }
-  if (props.trigger === 'contextmenu') {
-    events.value['contextmenu'] = (e) => {
-      e.preventDefault()
-      openFinal()
-    }
-    return
-  }
+  triggerStrategyMap.get(props.trigger)?.();
 }
 let popperInstance: null | Instance
 function destoryPopperInstance() {
@@ -119,8 +118,7 @@ watch(() => props.manual, (isManual) => {
   }
   attachEvents()
 })
-watch(() => props.trigger, (val, oldVal) => {
-  if (oldVal === val) return
+watch(() => props.trigger, () => {
   openDebounce?.cancel()
   visible.value = false
   emit("visible-change", false)
@@ -155,7 +153,7 @@ defineExpose<TooltipInstance>({
     <div class="lz-tooltip__trigger" ref="_triggerNode" v-on="events" v-if="!virtualTriggering">
       <slot></slot>
     </div>
-    <slot name="default"></slot>
+    <slot name="default" v-else></slot>
     <transition :name="transition" @after-leave="destoryPopperInstance">
       <div class="lz-tooltip__popper" ref="popperNode" v-on="dropdownEvents" v-if="visible">
         <slot name="content">{{ content }}</slot>

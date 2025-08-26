@@ -214,6 +214,9 @@ importers:
       vitepress:
         specifier: 1.0.0-rc.44
         version: 1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3)
+      vitepress-api-table:
+        specifier: workspace:*
+        version: link:../../libs/vitepress-api-table
       vitepress-preview-component:
         specifier: workspace:*
         version: link:../../libs/vitepress-preview-component
@@ -4483,8 +4486,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.0.5:
-    resolution: {integrity: sha512-uoNZaJ+a1/zppa/Vgmi8zIOP2PHXDN2rT8NyF+zQRK6ZG94lNB9prcV0GdLJbY9i9lrD47JOVIH92SaiA7oJ1A==}
+  vue-component-type-helpers@3.0.6:
+    resolution: {integrity: sha512-6CRM8X7EJqWCJOiKPvSLQG+hJPb/Oy2gyJx3pLjUEhY7PuaCthQu3e0zAGI1lqUBobrrk9IT0K8sG2GsCluxoQ==}
 
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -5879,7 +5882,7 @@ snapshots:
       storybook: 9.0.18(@testing-library/dom@10.4.1)
       type-fest: 2.19.0
       vue: 3.5.18(typescript@5.8.3)
-      vue-component-type-helpers: 3.0.5
+      vue-component-type-helpers: 3.0.6
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -9232,7 +9235,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.0.5: {}
+  vue-component-type-helpers@3.0.6: {}
 
   vue-demi@0.14.10(vue@3.5.18(typescript@5.8.3)):
     dependencies:

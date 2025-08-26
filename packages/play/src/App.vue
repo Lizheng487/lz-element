@@ -33,6 +33,9 @@ let activeName = reactive({
       <div>this is content c</div>
     </lz-collapse-item>
   </lz-collapse>
+  <lz-tooltip content="This is a tooltip" placement="top" trigger="hover">
+    <lz-button type="primary">Hover me</lz-button>
+  </lz-tooltip>
 </template>
 
 <style scoped>

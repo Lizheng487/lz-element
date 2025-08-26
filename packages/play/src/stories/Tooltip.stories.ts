@@ -1,7 +1,7 @@
 import type { StoryObj, Meta } from "@storybook/vue3-vite";
 
 import { fn } from "storybook/test";
-import { LzTooltip } from "lz-element";
+import { LzButton, LzTooltip } from "lz-element";
 import 'lz-element/dist/theme/Tooltip.css'
 
 type Story = StoryObj<typeof LzTooltip>;
@@ -36,7 +36,7 @@ export const Default: Story = {
     trigger: "hover",
   },
   render: (args) => ({
-    components: { LzTooltip },
+    components: { LzTooltip,LzButton },
     setup() {
       return {
         args,
@@ -44,7 +44,7 @@ export const Default: Story = {
     },
     template: `
       <LzTooltip v-bind="args">
-          <div style="height:30px;width:200px;background:red;padding:auto">trigger</div>
+        Hover me
       </LzTooltip>
     `,
   }),

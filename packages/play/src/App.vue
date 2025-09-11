@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LzButtonGroup } from 'lz-element';
+import { LzButtonGroup, LzPopconfirm } from 'lz-element';
 import { reactive } from 'vue';
 
 let activeName = reactive({
@@ -17,6 +17,13 @@ let activeName = reactive({
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <lz-popconfirm title="确定要删除吗？" icon="el-icon-info" icon-color="red" @confirm="() => {
+    console.log('confirm');
+  }" @cancel="() => {
+      console.log('cancel');
+    }">
+    <lz-button type="primary">删除</lz-button>
+  </lz-popconfirm>
   <LzButton type="primary" size="large" icon="search" plain>111111111</LzButton>
   <lz-button-group>
     <lz-button type="primary"><lz-icon icon="angle-left"></lz-icon>上一页</lz-button>

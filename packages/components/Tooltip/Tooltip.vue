@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<_TooltipProps>(), {
   showTimeout: 0,
   hideTimeout: 200
 })
-const emit = defineEmits<TooltipEmits>()
+const emits = defineEmits<TooltipEmits>()
 const visible = ref(false)
 const events: Ref<Record<string, EventListener>> = ref({})
 const outerEvents: Ref<Record<string, EventListener>> = ref({})
@@ -82,7 +82,7 @@ function togglePopper() {
 function setVisible(value: boolean) {
   if (props.disabled) return
   visible.value = value
-  emit('visible-change', value)
+  emits('visible-change', value)
 }
 function attachEvents() {
   if (props.disabled || props.manual) return
@@ -91,7 +91,7 @@ function attachEvents() {
 let popperInstance: null | Instance
 function destoryPopperInstance() {
   if (isNil(popperInstance)) return
-  popperInstance.destroy()
+  popperInstance?.destroy()
   popperInstance = null
 }
 function resetEvents() {
@@ -121,7 +121,7 @@ watch(() => props.manual, (isManual) => {
 watch(() => props.trigger, () => {
   openDebounce?.cancel()
   visible.value = false
-  emit("visible-change", false)
+  emits("visible-change", false)
   resetEvents()
 })
 watchEffect(() => {
@@ -132,7 +132,7 @@ watchEffect(() => {
   closeDebounce = debounce(bind(setVisible, null, false), closeDelay.value)
 })
 useClickOutside(containerNode, () => {
-  emit("click-outside")
+  emits("click-outside")
   if (props.trigger === "hover" || props.manual) return
   visible.value && closeFinal()
 })

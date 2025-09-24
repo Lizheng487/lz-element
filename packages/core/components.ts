@@ -7,6 +7,8 @@ import {
   LzAlert,
   LzTooltip,
   LzPopconfirm,
+  LzDropdown,
+  LzDropdownItem,
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -19,4 +21,6 @@ export default [
   LzAlert,
   LzTooltip,
   LzPopconfirm,
+  LzDropdown,
+  LzDropdownItem,
 ] as Plugin[];

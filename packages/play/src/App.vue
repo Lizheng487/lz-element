@@ -1,7 +1,26 @@
 <script setup lang="ts">
-import { LzButtonGroup, LzPopconfirm } from 'lz-element';
+import { LzButtonGroup, LzPopconfirm,type DropdownItemProps } from 'lz-element';
 import { reactive } from 'vue';
 
+const items:DropdownItemProps[] = [
+  {
+    command: "a",
+    label: "a",
+    disabled: false,
+  },
+  {
+    command: "b",
+    label: "b",
+    disabled: true,
+    divided: true,
+
+  },
+  {
+    command: "c",
+    label: "c",
+    disabled: true,
+  },
+];
 let activeName = reactive({
   accordion: true,
   modelValue: ["a"],
@@ -43,6 +62,9 @@ let activeName = reactive({
   <lz-tooltip content="This is a tooltip" placement="top" trigger="hover">
     <lz-button type="primary">Hover me</lz-button>
   </lz-tooltip>
+  <lz-dropdown :items="items" >
+    <span class="dropdown-link">Dropdown List <lz-icon icon="angle-down"></lz-icon></span>
+  </lz-dropdown>
 </template>
 
 <style scoped>

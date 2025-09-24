@@ -4,7 +4,7 @@
   <lz-button
     type="primary"
     tag="a"
-    href="https://github.com/"
+    href="https://github.com/Lizheng487/lz-element"
     target="_blank"
     rel="noopener noreferrer"
   >

@@ -1,6 +1,7 @@
 <script setup>
+import { LzMessage } from "lz-element";
 function handleBtnClick() {
-  console.log("btn click");
+  LzMessage.info("btn click");
 }
 </script>
 

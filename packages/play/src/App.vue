@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { LzButtonGroup, LzPopconfirm,type DropdownItemProps } from 'lz-element';
-import { reactive } from 'vue';
-
-const items:DropdownItemProps[] = [
+import { LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { reactive, ref, computed } from 'vue';
+import { get } from 'lodash-es';
+const items: DropdownItemProps[] = [
   {
     command: "a",
     label: "a",
@@ -25,6 +25,19 @@ let activeName = reactive({
   accordion: true,
   modelValue: ["a"],
 });
+const language = ref("")
+const langMap = {
+  ja,
+  en,
+  ko,
+  zhCn,
+  zhTw,
+} as const;
+const locale = computed(() => get(langMap, language.value));
+const changelang = () => {
+  const l = ["zhCn", "zhTw", 'ko', "en", "ja"];
+  language.value = l[(l.indexOf(language.value) + 1) % l.length];
+}
 </script>
 
 <template>
@@ -39,8 +52,8 @@ let activeName = reactive({
   <lz-popconfirm title="确定要删除吗？" icon="el-icon-info" icon-color="red" @confirm="() => {
     console.log('confirm');
   }" @cancel="() => {
-      console.log('cancel');
-    }">
+    console.log('cancel');
+  }">
     <lz-button type="primary">删除</lz-button>
   </lz-popconfirm>
   <LzButton type="primary" size="large" icon="search" plain>111111111</LzButton>
@@ -62,9 +75,15 @@ let activeName = reactive({
   <lz-tooltip content="This is a tooltip" placement="top" trigger="hover">
     <lz-button type="primary">Hover me</lz-button>
   </lz-tooltip>
-  <lz-dropdown :items="items" >
+  <lz-dropdown :items="items">
     <span class="dropdown-link">Dropdown List <lz-icon icon="angle-down"></lz-icon></span>
   </lz-dropdown>
+  <lz-button @click="changelang" type="info">change language</lz-button>
+  <lz-config-provider :locale="locale">
+    <lz-popconfirm title="Are you sure to delete this?">
+      <lz-button type="danger">Danger</lz-button>
+    </lz-popconfirm>
+  </lz-config-provider>
 </template>
 
 <style scoped>

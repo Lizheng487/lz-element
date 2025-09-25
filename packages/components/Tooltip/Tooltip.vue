@@ -4,7 +4,7 @@ import { computed, ref, watchEffect, watch, type Ref, onUnmounted } from 'vue';
 import { bind, debounce, type DebouncedFunc, isNil } from 'lodash-es';
 import { createPopper, type Instance } from '@popperjs/core';
 import { useClickOutside } from '@lz-element/hooks';
-import useEvenstToTiggerNode from './useEventsToTiggerNode';
+import useEventsToTiggerNode from './useEventsToTiggerNode';
 
 interface _TooltipProps extends TooltipProps {
   virtualRef?: HTMLElement | void
@@ -136,7 +136,7 @@ useClickOutside(containerNode, () => {
   if (props.trigger === "hover" || props.manual) return
   visible.value && closeFinal()
 })
-useEvenstToTiggerNode(props, triggerNode, events, ()=>{
+useEventsToTiggerNode(props, triggerNode, events, ()=>{
   openDebounce?.cancel()
   setVisible(false)
 })

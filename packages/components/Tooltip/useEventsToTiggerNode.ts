@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, watch } from "vue";
 import type { ComputedRef, Ref, WatchStopHandle } from "vue";
 import type { TooltipProps } from "./types";
 
-export function useEvenstToTiggerNode(
+export function useEventsToTiggerNode(
   props: TooltipProps & { virtualTriggering?: boolean },
   triggerNode: ComputedRef<HTMLElement | undefined>,
   events: Ref<Record<string, EventListener>>,
@@ -58,4 +58,4 @@ export function useEvenstToTiggerNode(
   });
 }
 
-export default useEvenstToTiggerNode;
+export default useEventsToTiggerNode;

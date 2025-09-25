@@ -6,13 +6,12 @@ import { ref, computed } from 'vue';
 import type { TooltipInstance } from '../Tooltip';
 import type { PopconfirmProps, PopconfirmEmits } from './type';
 import { addUnit } from '@lz-element/utils';
+import { useLocale } from '@lz-element/hooks';
 defineOptions({
   name: 'LzPopconfirm'
 })
 const props = withDefaults(defineProps<PopconfirmProps>(), {
   title: ' 确认删除吗？',
-  confirmButtonText: '确定',
-  cancelButtonText: '取消',
   confirmButtonType: 'primary',
   cancelButtonType: 'info',
   icon: 'check-circle',
@@ -24,6 +23,7 @@ const props = withDefaults(defineProps<PopconfirmProps>(), {
 const emits = defineEmits<PopconfirmEmits>();
 const tooltipRef = ref<TooltipInstance>();
 const style = computed(() => ({ width: addUnit(props.width) }));
+const { t } = useLocale();
 function hidePopper() {
   tooltipRef.value?.hide();
 }
@@ -46,8 +46,10 @@ function cancel(e: MouseEvent) {
           {{ title }}
         </div>
         <div class="lz-popconfirm__action">
-          <lz-button size="small" :type="cancelButtonType" @click="cancel">{{ cancelButtonText }}</lz-button>
-          <lz-button size="small" :type="confirmButtonType" @click="confirm">{{ confirmButtonText }}</lz-button>
+          <lz-button size="small" :type="cancelButtonType" @click="cancel">{{ cancelButtonText ||
+            t('popconfirm.cancelButtonText') }}</lz-button>
+          <lz-button size="small" :type="confirmButtonType" @click="confirm">{{ confirmButtonText ||
+            t('popconfirm.confirmButtonText') }}</lz-button>
         </div>
       </div>
     </template>

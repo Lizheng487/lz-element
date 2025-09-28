@@ -26,7 +26,6 @@ export interface ButtonProps {
   useThrottle?: boolean;
   throttleDuration?: number;
   loadingIcon?: string;
-  onClick?: (event: MouseEvent) => void;
 }
 export interface ButtonGroupProps {
   type?: ButtonType;
@@ -41,7 +40,7 @@ export interface ButtonGroupContext {
 }
 
 export interface ButtonEmits {
-  (e: "click", event: MouseEvent): void;
+  (e: "click", value: MouseEvent): void;
 }
 export interface ButtonInstance {
   ref: Ref<HTMLButtonElement | void>;

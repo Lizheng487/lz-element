@@ -17,7 +17,7 @@ export function addUnit(value?: string | number, defaultUnit = "px") {
     return `${value}${defaultUnit}`;
   }
   if (isString(value)) {
-    return `${value}`;
+    return value;
   }
   debugWarn(SCOPE, `binding value must be a string or number`);
 }

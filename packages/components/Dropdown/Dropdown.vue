@@ -3,7 +3,7 @@ import type { DropdownProps, DropdownItemProps, DropdownEmits, DropdownInstance,
 import { ref, computed, provide } from "vue";
 import type { TooltipInstance } from "../Tooltip/types";
 import { omit, isNil } from "lodash-es";
-import DropdownItem from "./DropdownItem.vue";
+import LzDropdownItem from "./DropdownItem.vue";
 import LzTooltip from "../Tooltip/Tooltip.vue";
 
 import { useDisabledStyle } from "@lz-element/hooks";

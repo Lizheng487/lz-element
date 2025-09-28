@@ -9,6 +9,7 @@ import {
   LzPopconfirm,
   LzDropdown,
   LzDropdownItem,
+  LzMessage,
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -23,4 +24,5 @@ export default [
   LzPopconfirm,
   LzDropdown,
   LzDropdownItem,
+  LzMessage,
 ] as Plugin[];

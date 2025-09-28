@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
 import { reactive, ref, computed } from 'vue';
 import { get } from 'lodash-es';
+
+const open1 = () => {
+  LzMessage({
+    showClose: true,
+    message: "This is a message.",
+  })
+}
 const items: DropdownItemProps[] = [
   {
     command: "a",
@@ -49,6 +56,7 @@ const changelang = () => {
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <lz-button @click="open1" type="primary">message</lz-button>
   <lz-popconfirm title="确定要删除吗？" icon="el-icon-info" icon-color="red" @confirm="() => {
     console.log('confirm');
   }" @cancel="() => {

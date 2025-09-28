@@ -1,0 +1,79 @@
+.lz-message {
+  --lz-message-bg-color: var(--lz-color-info-light-9);
+  --lz-message-border-color: var(--lz-border-color-lighter);
+  --lz-message-padding: 15px 19px;
+  --lz-message-close-size: 16px;
+  --lz-message-close-icon-color: var(--lz-text-color-placeholder);
+  --lz-message-close-hover-color: var(--lz-text-color-secondary);
+  --lz-message-icon-size: 16px;
+  --lz-message-icon-margin: 8px;
+}
+
+.lz-message {
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  border-radius: var(--lz-border-radius-base);
+  border-width: var(--lz-border-width);
+  border-style: var(--lz-border-style);
+  border-color: var(--lz-message-border-color);
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  background-color: var(--lz-message-bg-color);
+  padding: var(--lz-message-padding);
+  display: flex;
+  align-items: center;
+  transition: top var(--lz-transition-duration), opacity var(--lz-transition-duration),
+    transform var(--lz-transition-duration);
+  .lz-message__icon {
+    color: var(--lz-message-text-color);
+    font-size: var(--lz-message-icon-size);
+    width: var(--lz-message-icon-size);
+    margin-right: var(--lz-message-icon-margin);
+  }
+  .lz-message__content {
+    color: var(--lz-message-text-color);
+    overflow-wrap: break-word;
+  }
+  &.is-close .lz-message__content {
+    padding-right: 10px;
+  }
+  &.text-center {
+    justify-content: center;
+  }
+  .lz-message__close {
+    display: flex;
+    align-items: center;
+  }
+  .lz-message__close .lz-icon {
+    cursor: pointer;
+  }
+}
+
+@each $val in info, success, warning, danger {
+  .lz-message--$(val) {
+    --lz-message-bg-color: var(--lz-color-$(val)-light-9);
+    --lz-message-border-color: var(--lz-color-$(val)-light-8);
+    --lz-message-text-color: var(--lz-color-$(val));
+    .lz-message__close {
+      --lz-icon-color: var(--lz-color-$(val));
+    }
+  }
+}
+
+.lz-message--error {
+  --lz-message-bg-color: var(--lz-color-danger-light-9);
+  --lz-message-border-color: var(--lz-color-danger-light-8);
+  --lz-message-text-color: var(--lz-color-danger);
+  .lz-message__close {
+    --lz-icon-color: var(--lz-color-danger);
+  }
+}
+
+.lz-message.fade-up-enter-from,
+.lz-message.fade-up-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -100%);
+}

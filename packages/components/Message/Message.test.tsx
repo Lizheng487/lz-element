@@ -12,11 +12,11 @@ export const rAF = async () => {
     });
   });
 };
-// function getTopValue(element: Element) {
-//   const styles = window.getComputedStyle(element);
-//   const topValue = styles.getPropertyValue("top");
-//   return Number.parseFloat(topValue);
-// }
+function getTopValue(element: Element) {
+  const styles = window.getComputedStyle(element);
+  const topValue = styles.getPropertyValue("top");
+  return Number.parseFloat(topValue);
+}
 
 describe("Message", () => {
   test("message", async () => {
@@ -36,5 +36,14 @@ describe("Message", () => {
     closeAll();
     await rAF();
     expect(document.querySelector(".lz-message")).toBeFalsy();
+  });
+  test("message offset", async () => {
+    message({ message: "hello", duration: 0, offset: 100 });
+    message({ message: "hello", duration: 0, offset: 50 });
+    await rAF();
+    const elements = document.querySelectorAll(".lz-message");
+    expect(elements.length).toBe(2);
+    expect(getTopValue(elements[0])).toBe(100);
+    expect(getTopValue(elements[1])).toBe(150);
   });
 });

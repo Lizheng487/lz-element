@@ -1,8 +1,22 @@
 <script setup lang="ts">
-import { LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
-import { reactive, ref, computed } from 'vue';
+import { LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 
+function openNotify() {
+  LzNotification({
+    title: "This is a message",
+    message: h("i", { style: "color:teal" }, "This is a remider.  top-right"),
+    position: 'top-right'
+  })
+}
+function openNotify1() {
+  LzNotification({
+    title: "Title",
+    message: h("i", { style: "color:teal" }, "This is a remider.  bottom-right"),
+    position: 'bottom-right'
+  });
+}
 const open1 = () => {
   LzMessage({
     showClose: true,
@@ -57,6 +71,8 @@ const changelang = () => {
     </a>
   </div>
   <lz-button @click="open1" type="primary">message</lz-button>
+  <lz-button @click="openNotify" type="primary">Notification-top</lz-button>
+  <lz-button @click="openNotify1" type="primary">Notification-bottom</lz-button>
   <lz-popconfirm title="确定要删除吗？" icon="el-icon-info" icon-color="red" @confirm="() => {
     console.log('confirm');
   }" @cancel="() => {

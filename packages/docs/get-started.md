@@ -51,16 +51,12 @@ export default {
 ```
 
 
-::: api-table src=components/Button/types.ts
-:::
-
 ## 亮点
 
-::: details
-
+```html
 - Vite + Vitest + Vitepress 工具链
 - monorepo 分包管理
 - github actions 实现 CI/CD 自动化部署
-- 大模型辅助：使用大模型辅助完成需求分析，设计思路，快速实现组件，提升开发效率。
-- 当然，也会展示 发布“开箱即用” 的 npm 包
-  :::
+- Ai辅助：使用大模型Ai辅助完成需求分析，设计思路，快速实现组件，提升开发效率。
+- npm 包,发布“开箱即用” 的 npm 包  " lz-element "
+```

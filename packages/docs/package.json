@@ -15,8 +15,8 @@
   "packageManager": "pnpm@10.12.2",
   "devDependencies": {
     "@vitepress-demo-preview/plugin": "^1.4.0",
+    "vitepress": "1.1.4",
     "vitepress-api-table": "workspace:*",
-    "vitepress-preview-component": "workspace:*",
-    "vitepress": "1.0.0-rc.44"
+    "vitepress-preview-component": "workspace:*"
   }
 }

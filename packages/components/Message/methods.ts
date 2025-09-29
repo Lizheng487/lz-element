@@ -26,8 +26,8 @@ const normalizedOptions = (opts: MessageParams): CreateMessageProps => {
   const result =
     !opts || isVNode(opts) || isString(opts) ? { message: opts } : opts;
   return {
-    ...result,
     ...messageDefaults,
+    ...result,
   } as CreateMessageProps;
 };
 const createMessage = (props: CreateMessageProps): MessageInstance => {

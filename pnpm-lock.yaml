@@ -216,10 +216,10 @@ importers:
     devDependencies:
       '@vitepress-demo-preview/plugin':
         specifier: ^1.4.0
-        version: 1.4.0(markdown-it-container@3.0.0)(vitepress@1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3))(vue@3.5.18(typescript@5.8.3))
+        version: 1.4.0(markdown-it-container@3.0.0)(vitepress@1.1.4(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3))(vue@3.5.18(typescript@5.8.3))
       vitepress:
-        specifier: 1.0.0-rc.44
-        version: 1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3)
+        specifier: 1.1.4
+        version: 1.1.4(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3)
       vitepress-api-table:
         specifier: workspace:*
         version: link:../../libs/vitepress-api-table
@@ -4427,12 +4427,12 @@ packages:
       terser:
         optional: true
 
-  vitepress@1.0.0-rc.44:
-    resolution: {integrity: sha512-tO5taxGI7fSpBK1D8zrZTyJJERlyU9nnt0jHSt3fywfq3VKn977Hg0wUuTkEmwXlFYwuW26+6+3xorf4nD3XvA==}
+  vitepress@1.1.4:
+    resolution: {integrity: sha512-bWIzFZXpPB6NIDBuWnS20aMADH+FcFKDfQNYFvbOWij03PR29eImTceQHIzCKordjXYBhM/TjE5VKFTUJ3EheA==}
     hasBin: true
     peerDependencies:
-      markdown-it-mathjax3: ^4.3.2
-      postcss: ^8.4.35
+      markdown-it-mathjax3: ^4
+      postcss: ^8
     peerDependenciesMeta:
       markdown-it-mathjax3:
         optional: true
@@ -4494,8 +4494,8 @@ packages:
   vue-component-type-helpers@2.2.12:
     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
 
-  vue-component-type-helpers@3.0.8:
-    resolution: {integrity: sha512-WyR30Eq15Y/+odrUUMax6FmPbZwAp/HnC7qgR1r3lVFAcqwQ4wUoV79Mbh4SxDy3NiqDa+G4TOKD5xXSgBHo5A==}
+  vue-component-type-helpers@3.1.0:
+    resolution: {integrity: sha512-cC1pYNRZkSS1iCvdlaMbbg2sjDwxX098FucEjtz9Yig73zYjWzQsnMe5M9H8dRNv55hAIDGUI29hF2BEUA4FMQ==}
 
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
@@ -5895,7 +5895,7 @@ snapshots:
       storybook: 9.0.18(@testing-library/dom@10.4.1)
       type-fest: 2.19.0
       vue: 3.5.18(typescript@5.8.3)
-      vue-component-type-helpers: 3.0.8
+      vue-component-type-helpers: 3.1.0
 
   '@testing-library/dom@10.4.1':
     dependencies:
@@ -6014,12 +6014,12 @@ snapshots:
       vite: 5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1)
       vue: 3.5.18(typescript@5.8.3)
 
-  '@vitepress-demo-preview/plugin@1.4.0(markdown-it-container@3.0.0)(vitepress@1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3))(vue@3.5.18(typescript@5.8.3))':
+  '@vitepress-demo-preview/plugin@1.4.0(markdown-it-container@3.0.0)(vitepress@1.1.4(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3))(vue@3.5.18(typescript@5.8.3))':
     dependencies:
       '@flypeng/tool': 5.7.5
       markdown-it: 14.1.0
       markdown-it-container: 3.0.0
-      vitepress: 1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3)
+      vitepress: 1.1.4(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3)
       vue: 3.5.18(typescript@5.8.3)
 
   '@vitest/browser@3.2.4(playwright@1.54.1)(vite@5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1))(vitest@1.6.1)':
@@ -9101,13 +9101,13 @@ snapshots:
       sass: 1.90.0
       terser: 5.43.1
 
-  vitepress@1.0.0-rc.44(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3):
+  vitepress@1.1.4(@algolia/client-search@5.35.0)(@types/node@20.19.9)(@types/react@19.1.9)(async-validator@4.2.5)(postcss@8.5.6)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.90.0)(search-insights@2.17.3)(terser@5.43.1)(typescript@5.8.3):
     dependencies:
       '@docsearch/css': 3.9.0
       '@docsearch/js': 3.9.0(@algolia/client-search@5.35.0)(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(search-insights@2.17.3)
       '@shikijs/core': 1.29.2
       '@shikijs/transformers': 1.29.2
-      '@types/markdown-it': 13.0.9
+      '@types/markdown-it': 14.1.2
       '@vitejs/plugin-vue': 5.2.4(vite@5.4.19(@types/node@20.19.9)(sass@1.90.0)(terser@5.43.1))(vue@3.5.18(typescript@5.8.3))
       '@vue/devtools-api': 7.7.7
       '@vueuse/core': 10.11.1(vue@3.5.18(typescript@5.8.3))
@@ -9248,7 +9248,7 @@ snapshots:
 
   vue-component-type-helpers@2.2.12: {}
 
-  vue-component-type-helpers@3.0.8: {}
+  vue-component-type-helpers@3.1.0: {}
 
   vue-demi@0.14.10(vue@3.5.18(typescript@5.8.3)):
     dependencies:

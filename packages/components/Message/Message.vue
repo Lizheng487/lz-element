@@ -30,7 +30,8 @@ const { topOffset, bottomOffset } = useOffset({
   boxHeight
 })
 const customStyle = computed(() => ({
-  top: addUnit(topOffset.value)
+  top: addUnit(topOffset.value),
+  zIndex: props.zIndex,
   // top: topOffset.value + "px",
 }))
 let timer: number

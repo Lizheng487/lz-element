@@ -3,6 +3,10 @@ import { LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type Drop
 import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 
+const form = reactive({
+  name: "123",
+  desc: "22",
+})
 function openNotify() {
   LzNotification({
     title: "This is a message",
@@ -62,6 +66,8 @@ const changelang = () => {
 </script>
 
 <template>
+  <lz-input v-model="form.name" show-password type="password"></lz-input>
+  <lz-input v-model="form.desc"  type="textarea"></lz-input>
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />

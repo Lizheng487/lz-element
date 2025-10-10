@@ -11,6 +11,7 @@ import {
   LzDropdownItem,
   LzMessage,
   LzNotification,
+  LzInput,
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -27,4 +28,5 @@ export default [
   LzDropdownItem,
   LzMessage,
   LzNotification,
+  LzInput,
 ] as Plugin[];

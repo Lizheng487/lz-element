@@ -12,6 +12,7 @@ import {
   LzMessage,
   LzNotification,
   LzInput,
+  LzMessageBox
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -29,4 +30,5 @@ export default [
   LzMessage,
   LzNotification,
   LzInput,
+  LzMessageBox
 ] as Plugin[];

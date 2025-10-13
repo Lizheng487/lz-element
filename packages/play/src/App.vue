@@ -1,8 +1,17 @@
 <script setup lang="ts">
-import { LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
 import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 
+function openConfirm() {
+  LzMessageBox.confirm("确认删除吗？", "确认消息", {
+    title: "标题",
+    type: "warning",
+    showClose: true,
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+  });
+}
 const form = reactive({
   name: "123",
   desc: "22",
@@ -67,7 +76,7 @@ const changelang = () => {
 
 <template>
   <lz-input v-model="form.name" show-password type="password"></lz-input>
-  <lz-input v-model="form.desc"  type="textarea"></lz-input>
+  <lz-input v-model="form.desc" type="textarea"></lz-input>
   <div>
     <a href="https://vite.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
@@ -79,6 +88,7 @@ const changelang = () => {
   <lz-button @click="open1" type="primary">message</lz-button>
   <lz-button @click="openNotify" type="primary">Notification-top</lz-button>
   <lz-button @click="openNotify1" type="primary">Notification-bottom</lz-button>
+  <lz-button type="info" @click="openConfirm">openConfirm</lz-button>
   <lz-popconfirm title="确定要删除吗？" icon="el-icon-info" icon-color="red" @confirm="() => {
     console.log('confirm');
   }" @cancel="() => {

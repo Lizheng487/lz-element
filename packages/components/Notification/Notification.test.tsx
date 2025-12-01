@@ -1,18 +1,6 @@
 import { describe, test, expect } from "vitest";
-import { nextTick } from "vue";
 import { notification } from "./methods";
-
-
-export const rAF = async () => {
-  return new Promise((res) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(async () => {
-        res(null);
-        await nextTick();
-      });
-    });
-  });
-};
+import { rAF } from "@lz-element/utils";
 
 function getTopValue(element: Element) {
   const styles = window.getComputedStyle(element);

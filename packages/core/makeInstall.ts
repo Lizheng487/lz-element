@@ -6,12 +6,8 @@ import {
 } from "@lz-element/components";
 export function makeInstaller(components: Plugin[]) {
   const install = (app: App, opts?: ConfigProvideProps) => {
-    each(components, (c) => {
-      app.use(c);
-    });
-    if (opts) {
-      ProvideGlobalConfig(opts, app, true);
-    }
+    each(components, (c) => app.use(c));
+    if (opts) ProvideGlobalConfig(opts, app, true);
   };
 
   return install as Plugin;

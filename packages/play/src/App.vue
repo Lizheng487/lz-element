@@ -1,8 +1,25 @@
 <script setup lang="ts">
-import { LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { LzLoading, LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
 import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
-
+const loading = ref(false);
+function openLoading1() {
+  loading.value = true;
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
+}
+function openLoading2() {
+  const _loading = LzLoading.service({
+    lock: true,
+    spinner: "circle-notch",
+    text: "加载中...",
+    background: "rgba(255,255,255,0.5)",
+  });
+  setTimeout(() => {
+    _loading.close();
+  }, 2000);
+}
 function openConfirm() {
   LzMessageBox.confirm("确认删除吗？", "确认消息", {
     title: "标题",
@@ -85,6 +102,8 @@ const changelang = () => {
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <lz-button v-loading.fullscreen.lock="loading" @click="openLoading1" type="primary">openLoading1</lz-button>
+  <lz-button @click="openLoading2" type="primary">openLoading</lz-button>
   <lz-button @click="open1" type="primary">message</lz-button>
   <lz-button @click="openNotify" type="primary">Notification-top</lz-button>
   <lz-button @click="openNotify1" type="primary">Notification-bottom</lz-button>

@@ -14,6 +14,7 @@ import {
   LzInput,
   LzMessageBox,
   LzLoading,
+  LzSwitch,
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -33,4 +34,5 @@ export default [
   LzInput,
   LzMessageBox,
   LzLoading,
+  LzSwitch,
 ] as Plugin[];

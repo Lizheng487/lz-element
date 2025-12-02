@@ -3,6 +3,7 @@ import { LzLoading, LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPo
 import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 const loading = ref(false);
+const switchval = ref(1);
 function openLoading1() {
   loading.value = true;
   setTimeout(() => {
@@ -102,6 +103,7 @@ const changelang = () => {
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <lz-switch v-model="switchval" size="large" :active-value="0" :inactive-value="1"> </lz-switch>
   <lz-button v-loading.fullscreen.lock="loading" @click="openLoading1" type="primary">openLoading1</lz-button>
   <lz-button @click="openLoading2" type="primary">openLoading</lz-button>
   <lz-button @click="open1" type="primary">message</lz-button>

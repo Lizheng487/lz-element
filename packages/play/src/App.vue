@@ -4,6 +4,21 @@ import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 const loading = ref(false);
 const switchval = ref(1);
+const options = ref([
+  {
+    label: "Option A",
+    value: "a",
+  },
+  {
+    label: "Option B",
+    value: "b",
+  },
+  {
+    label: "Option C",
+    value: "c",
+  },
+]);
+const values = ref("")
 function openLoading1() {
   loading.value = true;
   setTimeout(() => {
@@ -93,6 +108,7 @@ const changelang = () => {
 </script>
 
 <template>
+  <lz-input v-model="values" clearable></lz-input>
   <lz-input v-model="form.name" show-password type="password"></lz-input>
   <lz-input v-model="form.desc" type="textarea"></lz-input>
   <div>
@@ -145,6 +161,8 @@ const changelang = () => {
       <lz-button type="danger">Danger</lz-button>
     </lz-popconfirm>
   </lz-config-provider>
+  <lz-select v-model="values" clearable placeholder="请选择" :options="options">
+  </lz-select>
 </template>
 
 <style scoped>

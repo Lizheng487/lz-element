@@ -13,7 +13,7 @@
     "test-utils": "cross-env NODE_ENV=test pnpm --filter @lz-element/utils test",
     "build": "run-s build-hooks build-comp",
     "build-comp": "cross-env NODE_ENV=production pnpm --filter lz-element build",
-    "build:dev": "cross-env NODE_ENV=development pnpm --filter lz-element build:watch",
+    "build:dev": "cross-env NODE_ENV=development pnpm --filter lz-element build",
     "build-hooks": "cross-env NODE_ENV=production pnpm --filter @lz-element/hooks build"
   },
   "keywords": [],

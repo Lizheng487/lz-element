@@ -17,6 +17,15 @@ const options = ref([
     label: "Option C",
     value: "c",
   },
+  {
+    label: "Option lz",
+    value: "lz",
+    disabled: true,
+  },
+  {
+    label: "Option E",
+    value: "e",
+  },
 ]);
 const values = ref("")
 function openLoading1() {
@@ -161,7 +170,13 @@ const changelang = () => {
       <lz-button type="danger">Danger</lz-button>
     </lz-popconfirm>
   </lz-config-provider>
-  <lz-select v-model="values" clearable placeholder="请选择" :options="options">
+  <lz-select v-model="values" clearable placeholder="请选择" filterable>
+    <lz-option value="1" label="111">
+    </lz-option>
+    <lz-option value="2" label="222">
+    </lz-option>
+    <!-- <lz-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+    </lz-option> -->
   </lz-select>
 </template>
 

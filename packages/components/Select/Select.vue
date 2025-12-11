@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { computed, nextTick, provide, reactive, ref, watch, type VNode } from 'vue';
+import { computed, h, nextTick, onMounted, provide, reactive, ref, watch, type VNode } from 'vue';
 import { POPPER_OPTIONS, SELECT_CTX_KEY } from './constants';
 import type { SelectProps, SelectInstance, SelectContext, SelectEmits, SelectStates, SelectOptionProps } from './types'
 import { useId, useFocusController, useClickOutside } from '@lz-element/hooks';
 import type { TooltipInstance } from '../Tooltip';
 import type { InputInstance } from '../Input';
-import { each, eq, filter, find, get, size, noop, isFunction } from 'lodash-es';
+import { each, eq, filter, find, get, size, noop, isFunction, map, assign, isNil, isBoolean, includes, debounce } from 'lodash-es';
 import LzOption from './Option.vue'
 import LzTooltip from '../Tooltip/Tooltip.vue';
 import LzInput from '../Input/Input.vue';
 import LzIcon from '../Icon/Icon.vue';
+import { debugWarn, RenderVnode } from '@lz-element/utils';
+import useKeyMap from './useKeyMap';
+
+const COMPONENT_NAME = 'LzSelect' as const;
 
 defineOptions({
   name: 'LzSelect'
@@ -23,6 +27,8 @@ const slots = defineSlots()
 const selectRef = ref<HTMLElement>()
 const tooltipRef = ref<TooltipInstance>()
 const inputRef = ref<InputInstance>()
+const filteredChilds = ref<Map<VNode, SelectOptionProps>>(new Map())
+const filteredOptions = ref(props.options ?? [])
 const isDropdownVisible = ref(false)
 const initialOption = findOption(props.modelValue)
 const selectStates = reactive<SelectStates>({
@@ -41,13 +47,95 @@ const showClear = computed(() =>
 const highlightedLine = computed(() => {
   let result: SelectOptionProps | void
   if (hasChildren.value) {
-    const node = children.value[selectStates.highlightedIndex]
-    result = node?.props?.value
+    // const node = children.value[selectStates.highlightedIndex]
+    // result = node?.props?.value
+    const node = [...filteredChilds.value][selectStates.highlightedIndex]?.[0]
+    result = filteredChilds.value.get(node)
   } else {
-    result = props.options[selectStates.highlightedIndex]
+    result = filteredOptions.value[selectStates.highlightedIndex]
   }
   return result
 })
+
+const childrenOptions = computed(() => {
+  if (!hasChildren.value) return []
+  return map(children.value, (item) => ({
+    vNode: h(item),
+    props: assign(item.props, {
+      disabled: item.props?.disabled === true ||
+        (!isNil(item.props?.disabled) && !isBoolean(item.props?.disabled))
+    }),
+  }))
+})
+const isNoData = computed(() => {
+  if (!props.filterable) return false
+  if (!hasData.value) return true
+  return false
+})
+const hasData = computed(() =>
+  (hasChildren.value && filteredChilds.value.size > 0) ||
+  (!hasChildren.value && size(filteredOptions.value) > 0))
+const lastIndex = computed(() => hasChildren.value ? filteredChilds.value.size - 1 : size(filteredOptions.value) - 1)
+function handleFilter() {
+  const searchKey = selectStates.inputValue
+  selectStates.highlightedIndex = -1
+  if (hasChildren.value) {
+    genFilterChilds(searchKey)
+    return
+  }
+  genFilterOptions(searchKey)
+}
+function setFilteredChilds(opts: typeof childrenOptions.value) {
+  filteredChilds.value.clear()
+  each(
+    opts,
+    (item) => { filteredChilds.value.set(item.vNode, item.props as SelectOptionProps) }
+  )
+}
+async function genFilterChilds(searchKey: string) {
+  if (!props.filterable) return
+  if (props.remote && props.remoteMethod && isFunction(props.remoteMethod)) {
+    await callRemoteMethod(props.remoteMethod, searchKey)
+    setFilteredChilds(childrenOptions.value)
+    return
+  }
+  if (props.filterMethod && isFunction(props.filterMethod)) {
+    const opts = map(props.filterMethod(searchKey), 'value')
+    setFilteredChilds(filter(childrenOptions.value, item => includes(opts, get(item, ['props', 'value']))))
+    return
+  }
+  setFilteredChilds(filter(childrenOptions.value, item => includes(get(item, ['props', 'label']), searchKey)))
+}
+async function genFilterOptions(searchKey: string) {
+  if (!props.filterable) return
+  if (props.remote && props.remoteMethod && isFunction(props.remoteMethod)) {
+    filteredOptions.value = await callRemoteMethod(props.remoteMethod, searchKey)
+    return
+  }
+  if (props.filterMethod && isFunction(props.filterMethod)) {
+    filteredOptions.value = props.filterMethod(searchKey)
+    return
+  }
+  filteredOptions.value = filter(props.options, (opt) => includes(opt.label, searchKey))
+}
+async function callRemoteMethod(method: Function, searchKey: string) {
+  if (!method || !isFunction(method)) return
+  selectStates.loading = true
+  let result
+  try {
+    result = await method(searchKey)
+  } catch (error) {
+    debugWarn(error as Error)
+    debugWarn(COMPONENT_NAME, '[LzElement] Select: callRemoteMethod error!')
+    result = []
+    return Promise.reject(error)
+  }
+  return result
+}
+const filterplaceholder = computed(() =>
+  props.filterable && selectStates.selectedOption && isDropdownVisible.value ? selectStates.selectedOption.label : props.placeholder)
+const timeout = computed(() => props.remote ? 300 : 100);
+const handleFilterDebounce = debounce(handleFilter, timeout.value)
 const inputId = useId().value
 const {
   wrapperRef: inputWrapperRef,
@@ -56,6 +144,18 @@ const {
   handleFocus,
 } = useFocusController(inputRef)
 useClickOutside(selectRef, (e) => handleClickOutside(e))
+const keyMap = useKeyMap({
+  isDropdownVisible,
+  highlightedLine,
+  hasData,
+  lastIndex,
+  selectStates,
+  controlVisible,
+  handleSelect,
+})
+function handleKeyDown(e: KeyboardEvent) {
+  keyMap.has(e.key) && keyMap.get(e.key)?.(e)
+}
 const focus: SelectInstance['focus'] = function () {
   inputRef.value?.focus()
 }
@@ -74,9 +174,19 @@ function toggleVisible() {
 function controlVisible(visible: boolean) {
   if (!tooltipRef.value) return
   get(tooltipRef, ['value', visible ? 'show' : 'hide'])?.()
+  props.filterable && controlInputVal(visible)
   isDropdownVisible.value = visible
   emits('visible-change', visible)
   selectStates.highlightedIndex = -1
+}
+function controlInputVal(visible: boolean) {
+  if (!props.filterable) return
+  if (visible) {
+    if (selectStates.selectedOption) selectStates.inputValue = ''
+    handleFilterDebounce()
+    return
+  }
+  selectStates.inputValue = selectStates.selectedOption?.label ?? ""
 }
 function findOption(value: string) {
   return find(props.options, (opt) => opt.value === value)
@@ -111,6 +221,13 @@ function setSelected() {
 watch(() => props.modelValue, () => {
   setSelected()
 })
+watch(() => props.options, (newVal) => {
+  filteredOptions.value = newVal ?? []
+})
+watch(() => childrenOptions.value, (newVal) => setFilteredChilds(newVal), { immediate: true })
+onMounted(() => {
+  setSelected()
+})
 provide<SelectContext>(SELECT_CTX_KEY, {
   handleSelect,
   selectStates,
@@ -129,9 +246,10 @@ defineExpose({
       @click-outside="controlVisible(false)" manual>
       <template #default>
         <div ref="inputWrapperRef">
-          <lz-input ref="inputRef" v-model="selectStates.inputValue" :id="inputId" :placeholder="placeholder"
-            :disabled="isDisabled" :readonly="!filterable || !isDropdownVisible" @focus="handleFocus"
-            @blur="handleBlur">
+          <lz-input ref="inputRef" v-model="selectStates.inputValue" :id="inputId"
+            :placeholder="filterable ? filterplaceholder : placeholder" :disabled="isDisabled"
+            :readonly="!filterable || !isDropdownVisible" @focus="handleFocus" @blur="handleBlur"
+            @input="handleFilterDebounce" @keydown="handleKeyDown">
             <template #suffix>
               <lz-icon v-if="showClear" icon="circle-xmark" class="lz-input__clear" @click.stop="handleClear"
                 @mousedown.prevent="noop"></lz-icon>
@@ -145,13 +263,18 @@ defineExpose({
         <div class="lz-select__loading" v-if="selectStates.loading">
           <lz-icon icon="spinner" spin></lz-icon>
         </div>
+        <div class="lz-select__nodata" v-else-if="filterable && isNoData">
+          No Data
+        </div>
         <ul class="lz-select__menu" v-else>
           <template v-if="!hasChildren">
-            <lz-option v-for="item in options" :key="item.value" v-bind="item">
+            <lz-option v-for="item in filteredOptions" :key="item.value" v-bind="item">
             </lz-option>
           </template>
           <template v-else>
-            <slot></slot>
+            <template v-for="[vNode, _props] in filteredChilds" :key="_props.value">
+              <render-vnode :vNode="vNode"></render-vnode>
+            </template>
           </template>
         </ul>
       </template>

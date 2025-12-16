@@ -17,6 +17,8 @@ import {
   LzSwitch,
   LzSelect,
   LzOption,
+  LzForm,
+  LzFormItem
 } from "@lz-element/components";
 import type { Plugin } from "vue";
 
@@ -39,4 +41,6 @@ export default [
   LzSwitch,
   LzSelect,
   LzOption,
+  LzForm,
+  LzFormItem
 ] as Plugin[];

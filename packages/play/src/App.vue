@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LzLoading, LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
+import { LzForm,LzFormItem,LzLoading, LzMessageBox, LzNotification, LzMessage, LzButtonGroup, LzPopconfirm, zhCn, type DropdownItemProps, zhTw, ko, en, ja, LzConfigProvider } from 'lz-element';
 import { reactive, ref, h, computed } from 'vue';
 import { get } from 'lodash-es';
 const loading = ref(false);
@@ -114,6 +114,36 @@ const changelang = () => {
   const l = ["zhCn", "zhTw", 'ko', "en", "ja"];
   language.value = l[(l.indexOf(language.value) + 1) % l.length];
 }
+const formData = reactive({
+  email: "123",
+  password: "",
+  confirmPwd: "",
+});
+const formRules: any = {
+  email: [{ type: "email", required: true, trigger: "blur" }],
+  password: [
+    { type: "string", required: true, trigger: "blur", min: 3, max: 5 },
+  ],
+  confirmPwd: [
+    { type: "string", required: true, trigger: "blur" },
+    {
+      validator: (_: typeof formRules, value: string) =>
+        value === formData.password,
+      trigger: "blur",
+      message: "两个密码必须相同",
+    },
+  ],
+};
+const formRef = ref();
+
+async function submit() {
+  try {
+    await formRef.value.validate();
+    console.log("passed!");
+  } catch (e) {
+    console.log("the error", e);
+  }
+}
 </script>
 
 <template>
@@ -170,6 +200,8 @@ const changelang = () => {
       <lz-button type="danger">Danger</lz-button>
     </lz-popconfirm>
   </lz-config-provider>
+  <lz-select v-model="values" clearable placeholder="请选择" filterable :option="options">
+  </lz-select>
   <lz-select v-model="values" clearable placeholder="请选择" filterable>
     <lz-option value="1" label="111">
     </lz-option>
@@ -178,6 +210,41 @@ const changelang = () => {
     <!-- <lz-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
     </lz-option> -->
   </lz-select>
+  <lz-form
+    ref="formRef"
+    :model="formData"
+    :rules="formRules"
+    label-suffix=":"
+    lz-loading-text="loading..."
+    lz-loading-spinner="circle-notch"
+    @submit="submit"
+  >
+    <lz-form-item label="email" prop="email" disabled>
+      <lz-input v-model="formData.email" clearable />
+    </lz-form-item>
+    <lz-form-item label="password" prop="password">
+      <lz-input v-model="formData.password" type="password" />
+    </lz-form-item>
+    <lz-form-item
+      label="confirm password"
+      prop="confirmPwd"
+      :rules="[
+        {
+          required: true,
+          trigger: 'test',
+          message: '测试自定义触发',
+        },
+      ]"
+    >
+      <template #default="{ validate: _validate }">
+        <lz-input v-model="formData.confirmPwd" type="password" />
+        <button @click.prevent="_validate('test')">vli</button>
+      </template>
+    </lz-form-item>
+    <div style="text-align: center">
+      <lz-button type="primary" native-type="submit">Submit</lz-button>
+    </div>
+  </lz-form>
 </template>
 
 <style scoped>

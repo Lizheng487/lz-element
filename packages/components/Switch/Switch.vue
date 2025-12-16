@@ -2,7 +2,8 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import type { SwitchProps, SwitchEmits, SwitchInstance } from './types'
 import { debugWarn } from '@lz-element/utils';
-import { useId } from '@lz-element/hooks';
+import { useFormItem, useFormDisabled, useFormItemInputId } from "../Form";
+
 defineOptions({
   name: 'LzSwitch',
   inheritAttrs: false
@@ -11,12 +12,13 @@ const props = withDefaults(defineProps<SwitchProps>(), {
   activeValue: true,
   inactiveValue: false,
 })
+const isDisabled = useFormDisabled();
+const { formItem } = useFormItem();
+const { inputId } = useFormItemInputId(props, formItem);
 const emits = defineEmits<SwitchEmits>()
-const isDisabled = computed(() => props.disabled)
 const innerValue = ref(props.modelValue)
 const inputRef = ref<HTMLInputElement>()
 const checked = computed(() => innerValue.value === props.activeValue)
-const inputId = useId()
 const focus: SwitchInstance['focus'] = function () {
   inputRef.value?.focus()
 }
@@ -33,6 +35,7 @@ onMounted(() => {
 })
 watch(checked, (val) => {
   inputRef.value!.checked = val
+  formItem?.validate("change").catch((err) => debugWarn(err));
 })
 defineExpose<SwitchInstance>({
   focus,
@@ -46,7 +49,8 @@ defineExpose<SwitchInstance>({
     'is-checked': checked,
   }" @click="handleChange">
     <input class="lz-switch__input" type="checkbox" role="switch" ref="inputRef" :id="inputId" :name="name"
-      :checked="checked" :disabled="isDisabled" @keydown.enter="handleChange" />
+      :checked="checked" :disabled="isDisabled" @keydown.enter="handleChange"
+      @blur="formItem?.validate('blur').catch((err) => debugWarn(err))" />
     <div class="lz-switch__core">
       <div class="lz-switch__core-inner">
         <span v-if="activeText || inactiveText" class="lz-switch__core-inner-text">{{ checked ? activeText :

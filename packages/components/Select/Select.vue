@@ -2,7 +2,7 @@
 import { computed, h, nextTick, onMounted, provide, reactive, ref, watch, type VNode } from 'vue';
 import { POPPER_OPTIONS, SELECT_CTX_KEY } from './constants';
 import type { SelectProps, SelectInstance, SelectContext, SelectEmits, SelectStates, SelectOptionProps } from './types'
-import { useId, useFocusController, useClickOutside } from '@lz-element/hooks';
+import { useFocusController, useClickOutside } from '@lz-element/hooks';
 import type { TooltipInstance } from '../Tooltip';
 import type { InputInstance } from '../Input';
 import { each, eq, filter, find, get, size, noop, isFunction, map, assign, isNil, isBoolean, includes, debounce } from 'lodash-es';
@@ -12,6 +12,7 @@ import LzInput from '../Input/Input.vue';
 import LzIcon from '../Icon/Icon.vue';
 import { debugWarn, RenderVnode } from '@lz-element/utils';
 import useKeyMap from './useKeyMap';
+import { useFormItem, useFormDisabled, useFormItemInputId } from "../Form";
 
 const COMPONENT_NAME = 'LzSelect' as const;
 
@@ -24,6 +25,9 @@ const props = withDefaults(defineProps<SelectProps>(), {
 })
 const emits = defineEmits<SelectEmits>()
 const slots = defineSlots()
+const isDisabled = useFormDisabled();
+const { formItem } = useFormItem();
+const { inputId } = useFormItemInputId(props, formItem);
 const selectRef = ref<HTMLElement>()
 const tooltipRef = ref<TooltipInstance>()
 const inputRef = ref<InputInstance>()
@@ -38,7 +42,6 @@ const selectStates = reactive<SelectStates>({
   loading: false,
   highlightedIndex: -1,
 })
-const isDisabled = computed(() => props.disabled)
 const children = computed(() => filter(slots.default?.(), (child) => eq(child.type, LzOption)))
 const hasChildren = computed(() => size(children.value))
 const showClear = computed(() =>
@@ -136,7 +139,6 @@ const filterplaceholder = computed(() =>
   props.filterable && selectStates.selectedOption && isDropdownVisible.value ? selectStates.selectedOption.label : props.placeholder)
 const timeout = computed(() => props.remote ? 300 : 100);
 const handleFilterDebounce = debounce(handleFilter, timeout.value)
-const inputId = useId().value
 const {
   wrapperRef: inputWrapperRef,
   isFocused,
@@ -197,6 +199,7 @@ function handleClear() {
   selectStates.selectedOption = null
   emits('clear')
   each(['change', 'update:modelValue'], k => emits(k as any, ""))
+  formItem?.clearValidate();
 }
 function renderLabel(option: SelectOptionProps): VNode | string {
   if (isFunction(props.renderLabel)) {
@@ -225,6 +228,16 @@ watch(() => props.options, (newVal) => {
   filteredOptions.value = newVal ?? []
 })
 watch(() => childrenOptions.value, (newVal) => setFilteredChilds(newVal), { immediate: true })
+watch(
+  () => props.modelValue,
+  (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      formItem?.validate("change").catch((err) => debugWarn(err));
+    }
+    setSelected();
+  }
+);
+
 onMounted(() => {
   setSelected()
 })

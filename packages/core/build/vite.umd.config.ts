@@ -29,7 +29,7 @@ export default defineConfig({
     }),
     compression({ include: /.(cjs|css)$/i }),
     hooks({
-      reFiles: ["./dist/umd", "./dist/index.css"],
+      rmFiles: ["./dist/umd", "./dist/index.css"],
       afterBuild: moveStyles,
     }),
     terser({

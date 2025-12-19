@@ -1,0 +1,180 @@
+<script setup lang="ts">
+import type { UploadProps, UploadFile } from "./types";
+import LzButton from "../Button/Button.vue";
+import { ref } from "vue";
+import { cloneDeep, each, isFunction } from "lodash-es";
+import axios, { type AxiosProgressEvent } from "axios";
+import { useId } from "@lz-element/hooks";
+import UploadList from "./UploadList.vue";
+
+defineOptions({
+  name: "LzUpload",
+});
+
+const props = defineProps<UploadProps>();
+
+const fileInputRef = ref<HTMLInputElement>();
+const fileList = ref<UploadFile[]>(props.defaultFileList ?? []);
+
+function setFileListItem(item: UploadFile) {
+  const index = fileList.value.findIndex((file) => file.uid === item.uid);
+  if (index !== -1) {
+    fileList.value.splice(index, 1, cloneDeep(item));
+  } else {
+    fileList.value.unshift(cloneDeep(item));
+  }
+}
+
+function handleClick() {
+  fileInputRef.value?.click();
+}
+
+function handleFileChange(e: Event) {
+  const files = (e.target as HTMLInputElement)?.files;
+  if (!files) return;
+  uploadFiles(files);
+  if (fileInputRef.value) {
+    fileInputRef.value.value = "";
+  }
+}
+
+function uploadFiles(files: FileList) {
+  const postFiles = Array.from(files);
+  each(postFiles, (file) => {
+    if (!props?.beforeUpload) {
+      post(file);
+    } else {
+      const result = props.beforeUpload(file);
+      if (result && result instanceof Promise) {
+        result.then((processFile) => {
+          post(processFile);
+        });
+      } else if (result !== false) {
+        post(file);
+      }
+    }
+  });
+}
+
+function post(file: File) {
+  const _file: UploadFile = {
+    uid: useId().value + "_upload-file_" + Date.now(),
+    status: "ready",
+    name: file.name,
+    size: file.size,
+    percent: 0,
+    raw: file,
+  };
+
+  setFileListItem(_file);
+
+  const formData = new FormData();
+  formData.append(file.name, file);
+  axios
+    .postForm(props.action, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (e: AxiosProgressEvent) => {
+        let percent = Math.round((e.loaded * 100) / e.total!) || 0;
+
+        _file.percent = percent;
+        if (percent < 100) {
+          _file.status = "uploading";
+          setFileListItem(_file);
+        }
+        isFunction(props.onProgress) && props.onProgress(percent, file);
+      },
+    })
+    .then((resp: any) => {
+      _file.status = "success";
+      _file.response = resp.data;
+      isFunction(props.onSuccess) && props.onSuccess(resp.data, file);
+      setFileListItem(_file);
+    })
+    .catch((err: any) => {
+      _file.status = "error";
+      isFunction(props.onError) && props.onError(err, file);
+      setFileListItem(_file);
+    })
+    .finally(() => {
+      isFunction(props.onChange) && props.onChange(file);
+    });
+}
+
+function handleRemove(file: UploadFile) {
+  fileList.value = fileList.value.filter((item) => item.uid !== file.uid);
+  isFunction(props.onRemove) && props.onRemove(file);
+}
+</script>
+
+<template>
+  <div class="lz-upload">
+    <div class="lz-upload__content" @click="handleClick">
+      <slot>
+        <lz-button type="primary">Upload File</lz-button>
+      </slot>
+    </div>
+    <input ref="fileInputRef" class="lz-file-input" type="file" @change="handleFileChange" style="display: none" />
+    <upload-list :file-list="fileList" :on-remove="handleRemove" />
+  </div>
+</template>
+<style scoped>
+.lz-upload {
+  display: inline-block;
+  width: 100%;
+}
+
+.lz-upload__content {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lz-upload__content:hover {
+  opacity: 0.85;
+}
+
+.lz-upload__content:active {
+  opacity: 0.7;
+}
+
+/* 文件输入框隐藏样式 */
+.lz-file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 如果使用拖拽上传区域 */
+.lz-upload--drag {
+  border: 2px dashed #d9d9d9;
+  border-radius: 6px;
+  padding: 40px;
+  text-align: center;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.lz-upload--drag:hover {
+  border-color: #409eff;
+  background-color: #f5f7fa;
+}
+
+.lz-upload--drag.is-dragover {
+  border-color: #409eff;
+  background-color: #e6f2ff;
+}
+
+/* 禁用状态 */
+.lz-upload.is-disabled .lz-upload__content {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.lz-upload.is-disabled .lz-upload__content:hover {
+  opacity: 0.6;
+}
+</style>

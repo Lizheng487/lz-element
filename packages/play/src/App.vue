@@ -245,6 +245,34 @@ async function submit() {
       <lz-button type="primary" native-type="submit">Submit</lz-button>
     </div>
   </lz-form>
+  <lz-upload
+    action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+    :default-file-list="[
+      {
+        uid: '123',
+        size: 123,
+        name: 'test.png',
+        status: 'uploading',
+        percent: 20,
+      },
+      {
+        uid: '124',
+        size: 123,
+        name: 'test1.png',
+        status: 'success',
+        percent: 100,
+      },
+      {
+        uid: '125',
+        size: 123,
+        name: 'test4.png',
+        status: 'error',
+        percent: 34,
+      },
+    ]"
+  >
+    <lz-button type="success" round icon="upload"> 上传文件 </lz-button>
+  </lz-upload>
 </template>
 
 <style scoped>

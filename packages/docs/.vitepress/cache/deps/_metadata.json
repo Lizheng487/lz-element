@@ -2,12 +2,12 @@
   "hash": "74e5b40d",
   "configHash": "3804df72",
   "lockfileHash": "fa34a13e",
-  "browserHash": "bca0afec",
+  "browserHash": "12d750eb",
   "optimized": {
     "vue": {
       "src": "../../../../../node_modules/.pnpm/vue@3.5.18_typescript@5.8.3/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "ce07654d",
+      "fileHash": "da8d3b3e",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
@@ -19,13 +19,13 @@
     "vitepress > @vueuse/core": {
       "src": "../../../../../node_modules/.pnpm/@vueuse+core@10.11.1_vue@3.5.18_typescript@5.8.3_/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "5fef84dc",
+      "fileHash": "bde7025f",
       "needsInterop": false
     },
     "vitepress > @vueuse/integrations/useFocusTrap": {
       "src": "../../../../../node_modules/.pnpm/@vueuse+integrations@10.11._47046ec5412816a362089622fe5b10b9/node_modules/@vueuse/integrations/useFocusTrap.mjs",
       "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
-      "fileHash": "77a128ba",
+      "fileHash": "682cf918",
       "needsInterop": false
     },
     "vitepress > mark.js/src/vanilla.js": {
@@ -49,7 +49,19 @@
     "@fortawesome/vue-fontawesome": {
       "src": "../../../../../node_modules/.pnpm/@fortawesome+vue-fontawesom_dec0bd894cedcd36a60c76be245cadb8/node_modules/@fortawesome/vue-fontawesome/index.es.js",
       "file": "@fortawesome_vue-fontawesome.js",
-      "fileHash": "329eba5a",
+      "fileHash": "511f82a2",
+      "needsInterop": false
+    },
+    "async-validator": {
+      "src": "../../../../../node_modules/.pnpm/async-validator@4.2.5/node_modules/async-validator/dist-web/index.js",
+      "file": "async-validator.js",
+      "fileHash": "a3b06a63",
+      "needsInterop": false
+    },
+    "lodash-es": {
+      "src": "../../../../../node_modules/.pnpm/lodash-es@4.17.21/node_modules/lodash-es/lodash.js",
+      "file": "lodash-es.js",
+      "fileHash": "30dc6445",
       "needsInterop": false
     }
   },
